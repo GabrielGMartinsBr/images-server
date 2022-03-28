@@ -1,26 +1,20 @@
-const fs = require('fs');
-const path = require('path');
-const sizeOf = require('image-size');
+const dotenv = require('dotenv');
 
 const { server } = require('./server');
+const { scanImages } = require('./images');
 
-const contentDir = '/run/media/home/common/hdd/common-area/vizoo-mandala-images';
-
-async function scanImages() {
-    const res = await fs.promises.readdir(contentDir);
-    return res.map(src => {
-        const absolutePath = path.join(contentDir, src);
-        const dimensions = sizeOf(absolutePath);
-        return {
-            src,
-            ...dimensions
-        };
-    });
-}
+dotenv.config();
+const CONTENT_DIR = process.env.CONTENT_DIR;
+const PORT = process.env.PORT;
 
 async function main() {
-    const images = await scanImages();
-    server.init(contentDir, images);
+    const images = await scanImages(CONTENT_DIR);
+    server.init(CONTENT_DIR, images, PORT);
+    console.log(
+        `| Server has been init with the following settings`,
+        `\n|\tport: ${PORT}`,
+        `\n|\tcontentDir: ${CONTENT_DIR}`
+    );
 }
 
 main();

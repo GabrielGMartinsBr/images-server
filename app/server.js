@@ -10,11 +10,11 @@ function server() {
 
         app.use(express.static(contentDir));
     }
-    
+
     return {
-        init(contentDir, images) {
+        init(contentDir, images, port = 8080) {
             setupRoutes(contentDir, images);
-            app.listen(8080);
+            app.listen(port);
         }
     }
 }
