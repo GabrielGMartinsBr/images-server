@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 
 function server() {
     const app = express();
+    app.use(cors());
 
     function setupRoutes(contentDir, images) {
         app.get('/', (req, res) => {
